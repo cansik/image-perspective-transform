@@ -40,21 +40,21 @@ class Sketch : PApplet() {
         background(22f)
 
         // read data
-        val referenceImage = source.readReference()
-        val originalImage = source.readOriginal()
+        val queryImage = source.readReference()
+        val trainImage = source.readOriginal()
 
         // resize images
-        referenceImage.resize(imageSize, 0)
-        originalImage.resize(imageSize, 0)
+        queryImage.resize(imageSize, 0)
+        trainImage.resize(imageSize, 0)
 
         // do recognition
-        val result = detector.transform(referenceImage.toMat(), originalImage.toMat())
+        val result = detector.transform(queryImage.toMat(), trainImage.toMat())
         val resultImage = PImage(result.cols(), result.rows())
         result.toPImage(resultImage)
 
         // draw images
-        g.image(referenceImage, 0f, 0f)
-        g.image(originalImage, imageSize.toFloat(), 0f)
+        g.image(queryImage, 0f, 0f)
+        g.image(trainImage, imageSize.toFloat(), 0f)
         g.image(resultImage, imageSize * 2f, 0f)
 
         // show fps

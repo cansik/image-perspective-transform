@@ -6,7 +6,6 @@ import org.opencv.core.Mat
 import org.opencv.core.MatOfKeyPoint
 import org.opencv.core.Scalar
 import org.opencv.features2d.Feature2D
-import org.opencv.features2d.ORB
 
 class FeatureDetector(val detector: Feature2D) {
     fun detect(image : Mat) : FeatureDetectorResult
