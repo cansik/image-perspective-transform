@@ -38,7 +38,7 @@ class SimplePerspectiveTransformer : PerspectiveTransformer {
         println("Reference features: ${referenceFeatures.keypoints.rows()}")
         println("Original features: ${originalFeatures.keypoints.rows()}")
 
-        
+
 
         return result
     }

@@ -60,6 +60,8 @@ class Sketch : PApplet() {
         // show fps
         fpsAverage += frameRate.toDouble()
         surface.setTitle("IVAT | FPS: ${frameRate.format(2)}\tAVG: ${fpsAverage.average.format(2)}\t")
+
+        saveFrame("readme/current.jpg")
     }
 
     override fun stop() {
