@@ -16,10 +16,10 @@ import org.opencv.core.Scalar
 
 class SimplePerspectiveTransformer(private val nTopFeatures: Int = 20) : PerspectiveTransformer {
 
-    lateinit var detector: FeatureDetector
-    lateinit var matcher: BinaryFeatureMatcher
+    private val detector: FeatureDetector
+    private val matcher: BinaryFeatureMatcher
 
-    override fun setup(parent: PApplet) {
+    init {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME)
 
         // setup detector and matcher
@@ -28,16 +28,14 @@ class SimplePerspectiveTransformer(private val nTopFeatures: Int = 20) : Perspec
         matcher = BinaryFeatureMatcher()
     }
 
-    override fun transform(query: Mat, train: Mat): Mat {
+    override fun detectTransformMatrix(query: Mat, train: Mat): Mat {
         // prepare input
-        Imgproc.cvtColor(query, query, Imgproc.COLOR_BGR2GRAY)
-        Imgproc.cvtColor(train, train, Imgproc.COLOR_BGR2GRAY)
+        Imgproc.cvtColor(query, query, Imgproc.COLOR_BGRA2GRAY)
+        Imgproc.cvtColor(train, train, Imgproc.COLOR_BGRA2GRAY)
 
         // detect features
         val queryFeatures = detector.detect(query)
         val trainFeatures = detector.detect(train)
-
-        val result = train.copy()
 
         // draw keypoints
         Features2d.drawKeypoints(query.to8UC3(), queryFeatures.keypoints, query, Scalar(0.0, 0.0, 255.0), 0)
@@ -49,7 +47,6 @@ class SimplePerspectiveTransformer(private val nTopFeatures: Int = 20) : Perspec
         // draw refrence cross
         query.drawCross(query.imageCenter(), 50.0, Scalar(255.0, 0.0, 0.0))
         train.drawCross(train.imageCenter(), 50.0, Scalar(255.0, 0.0, 0.0))
-        result.drawCross(result.imageCenter(), 50.0, Scalar(255.0, 0.0, 0.0))
 
         // match features and sort by distance
         val matches = matcher.match(queryFeatures.descriptors, trainFeatures.descriptors).matches.toList()
@@ -71,10 +68,12 @@ class SimplePerspectiveTransformer(private val nTopFeatures: Int = 20) : Perspec
         val queryRect = MatOfPoint2f(*rectangle.matches.map { queryKeyPoints[it.queryIdx].pt }.toTypedArray())
         val trainRect = MatOfPoint2f(*rectangle.matches.map { trainKeyPoints[it.trainIdx].pt }.toTypedArray())
 
-        val transformMatrix = Imgproc.getPerspectiveTransform(trainRect, queryRect)
-        Imgproc.warpPerspective(result, result, transformMatrix, query.size())
+        return Imgproc.getPerspectiveTransform(trainRect, queryRect)
+    }
 
-        return result
+    override fun transform(image : Mat, transformMatrix : Mat)
+    {
+        Imgproc.warpPerspective(image, image, transformMatrix, image.size())
     }
 
 

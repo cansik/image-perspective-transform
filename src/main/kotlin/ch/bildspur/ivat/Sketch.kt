@@ -3,11 +3,9 @@ package ch.bildspur.ivat
 import ch.bildspur.ivat.io.ImageSource
 import ch.bildspur.ivat.io.SingleImageSource
 import ch.bildspur.ivat.util.ExponentialMovingAverage
-import ch.bildspur.ivat.util.imageAdjusted
 import ch.bildspur.ivat.vision.*
 import processing.core.PApplet
 import processing.core.PFont
-import processing.core.PImage
 
 
 class Sketch : PApplet() {
@@ -27,7 +25,6 @@ class Sketch : PApplet() {
 
     override fun setup() {
         source.setup(this)
-        detector.setup(this)
 
         // setup style
         font = createFont("Helvetica", 20f)
@@ -45,11 +42,14 @@ class Sketch : PApplet() {
         queryImage.resize(imageSize, 0)
         trainImage.resize(imageSize, 0)
 
+        // create images for opencv
         val queryMat = queryImage.toMat()
         val trainMat = trainImage.toMat()
+        val resultMat = trainImage.toMat()
 
         // do recognition
-        val resultMat = detector.transform(queryMat, trainMat)
+        val transformMatrix = detector.detectTransformMatrix(queryMat, trainMat)
+        detector.transform(resultMat, transformMatrix)
 
         // draw images
         g.image(queryMat.toPImage(), 0f, 0f)
