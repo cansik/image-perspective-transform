@@ -37,7 +37,7 @@ class SimplePerspectiveTransformer(private val nTopFeatures: Int = 20) : Perspec
         val queryFeatures = detector.detect(query)
         val trainFeatures = detector.detect(train)
 
-        val result = train.zeros()
+        val result = train.copy()
 
         // draw keypoints
         Features2d.drawKeypoints(query.to8UC3(), queryFeatures.keypoints, query, Scalar(0.0, 0.0, 255.0), 0)
@@ -45,6 +45,11 @@ class SimplePerspectiveTransformer(private val nTopFeatures: Int = 20) : Perspec
 
         println("Reference features: ${queryFeatures.keypoints.rows()}")
         println("Original features: ${trainFeatures.keypoints.rows()}")
+
+        // draw refrence cross
+        query.drawCross(query.imageCenter(), 50.0, Scalar(255.0, 0.0, 0.0))
+        train.drawCross(train.imageCenter(), 50.0, Scalar(255.0, 0.0, 0.0))
+        result.drawCross(result.imageCenter(), 50.0, Scalar(255.0, 0.0, 0.0))
 
         // match features and sort by distance
         val matches = matcher.match(queryFeatures.descriptors, trainFeatures.descriptors).matches.toList()
@@ -58,9 +63,16 @@ class SimplePerspectiveTransformer(private val nTopFeatures: Int = 20) : Perspec
 
         // show selected keypoints
         rectangle.matches.forEach{
-            query.circle(queryKeyPoints[it.queryIdx].pt, 10, Scalar(0.0, 255.0, 0.0), 2)
-            train.circle(trainKeyPoints[it.trainIdx].pt, 10, Scalar(0.0, 255.0, 0.0), 2)
+            query.drawCircle(queryKeyPoints[it.queryIdx].pt, 10, Scalar(0.0, 255.0, 0.0), 2)
+            train.drawCircle(trainKeyPoints[it.trainIdx].pt, 10, Scalar(0.0, 255.0, 0.0), 2)
         }
+
+        // create perspective transformation
+        val queryRect = MatOfPoint2f(*rectangle.matches.map { queryKeyPoints[it.queryIdx].pt }.toTypedArray())
+        val trainRect = MatOfPoint2f(*rectangle.matches.map { trainKeyPoints[it.trainIdx].pt }.toTypedArray())
+
+        val transformMatrix = Imgproc.getPerspectiveTransform(trainRect, queryRect)
+        Imgproc.warpPerspective(result, result, transformMatrix, query.size())
 
         return result
     }

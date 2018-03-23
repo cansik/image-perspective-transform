@@ -244,7 +244,18 @@ fun MatOfPoint.convexHull(clockwise: Boolean = false): MatOfInt {
     return result
 }
 
-fun Mat.circle(center : Point, radius : Int, color : Scalar, thickness : Int)
+fun Mat.drawCircle(center : Point, radius : Int, color : Scalar, thickness : Int = 1)
 {
     Imgproc.circle(this, center, radius, color, thickness)
+}
+
+fun Mat.drawCross(center : Point, size : Double, color : Scalar, thickness : Int = 1)
+{
+    val length = size / 2.0
+    Imgproc.line(this,  Point(center.x - length, center.y), Point(center.x + length, center.y), color, thickness)
+    Imgproc.line(this,  Point(center.x, center.y - length), Point(center.x, center.y + length), color, thickness)
+}
+
+fun Mat.imageCenter() : Point{
+    return Point(this.width() / 2.0, this.height() / 2.0)
 }
