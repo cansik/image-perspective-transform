@@ -17,3 +17,21 @@ Transform the view angle of an image onto another image of the same object.
 * ORB for feature detection
 * BFMatcher for matching
 * Perspective and warping by opencv
+
+### Example
+Here is an illustrated example how the algorithm performs.
+
+#### Reference Image
+![Reference Image](data/result/reference.png)
+
+#### Original Image
+![Original Image](data/result/original.png)
+
+#### Transformed Image
+![Transformed Image](data/result/result.png)
+
+#### Additive Composition
+![Additive Composition](data/result/blend.png)
+
+### About
+Algorithms by opencv / Florian Bruggisser *(ZHdK 2018)*
