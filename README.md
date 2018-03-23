@@ -18,6 +18,22 @@ Transform the perspective of an image into a reference image perspective.
 * BFMatcher for matching
 * Perspective and warping by opencv
 
+### How To
+
+```kotlin
+// load images
+val train = Imgcodecs.imread("reference.png")
+val query = Imgcodecs.imread("original.png")
+val result = query.copy()
+
+// create transformer with n=100 features 
+val transformer = SimplePerspectiveTransformer(100)
+
+// read matrix and apply transform
+val matrix = transformer.detectTransformMatrix(train, query)
+transformer.transform(result, matrix)
+```
+
 ### Example
 Here is an illustrated example how the algorithm performs.
 
