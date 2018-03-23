@@ -47,15 +47,16 @@ class Sketch : PApplet() {
         queryImage.resize(imageSize, 0)
         trainImage.resize(imageSize, 0)
 
+        val queryMat = queryImage.toMat()
+        val trainMat = trainImage.toMat()
+
         // do recognition
-        val result = detector.transform(queryImage.toMat(), trainImage.toMat())
-        val resultImage = PImage(result.cols(), result.rows())
-        result.toPImage(resultImage)
+        val resultMat = detector.transform(queryMat, trainMat)
 
         // draw images
-        g.image(queryImage, 0f, 0f)
-        g.image(trainImage, imageSize.toFloat(), 0f)
-        g.image(resultImage, imageSize * 2f, 0f)
+        g.image(queryMat.toPImage(), 0f, 0f)
+        g.image(trainMat.toPImage(), imageSize.toFloat(), 0f)
+        g.image(resultMat.toPImage(), imageSize * 2f, 0f)
 
         // show fps
         fpsAverage += frameRate.toDouble()

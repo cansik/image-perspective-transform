@@ -5,5 +5,5 @@ import processing.core.PApplet
 
 interface PerspectiveTransformer {
     fun setup(parent : PApplet)
-    fun transform(reference : Mat, original : Mat) : Mat
+    fun transform(query : Mat, train : Mat) : Mat
 }

@@ -30,14 +30,18 @@ class SimplePerspectiveTransformer(private val nTopFeatures: Int = 20) : Perspec
 
     override fun transform(query: Mat, train: Mat): Mat {
         // prepare input
+        Imgproc.cvtColor(query, query, Imgproc.COLOR_BGR2GRAY)
         Imgproc.cvtColor(train, train, Imgproc.COLOR_BGR2GRAY)
 
         // detect features
         val queryFeatures = detector.detect(query)
         val trainFeatures = detector.detect(train)
 
-        val result = train.copy()
-        Features2d.drawKeypoints(train.to8UC3(), trainFeatures.keypoints, result, Scalar(0.0, 0.0, 255.0), 0)
+        val result = train.zeros()
+
+        // draw keypoints
+        Features2d.drawKeypoints(query.to8UC3(), queryFeatures.keypoints, query, Scalar(0.0, 0.0, 255.0), 0)
+        Features2d.drawKeypoints(train.to8UC3(), trainFeatures.keypoints, train, Scalar(0.0, 0.0, 255.0), 0)
 
         println("Reference features: ${queryFeatures.keypoints.rows()}")
         println("Original features: ${trainFeatures.keypoints.rows()}")
@@ -54,8 +58,8 @@ class SimplePerspectiveTransformer(private val nTopFeatures: Int = 20) : Perspec
 
         // show selected keypoints
         rectangle.matches.forEach{
-            val center = trainKeyPoints[it.trainIdx].pt
-            result.circle(center, 10, Scalar(0.0, 255.0, 0.0), 2)
+            query.circle(queryKeyPoints[it.queryIdx].pt, 10, Scalar(0.0, 255.0, 0.0), 2)
+            train.circle(trainKeyPoints[it.trainIdx].pt, 10, Scalar(0.0, 255.0, 0.0), 2)
         }
 
         return result

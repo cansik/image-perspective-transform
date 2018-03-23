@@ -69,19 +69,28 @@ fun PImage.toMat(m: Mat) {
 fun Mat.toPImage(img: PImage) {
     img.loadPixels()
 
-    if (this.channels() === 3) {
-        val m2 = Mat()
-        Imgproc.cvtColor(this, m2, Imgproc.COLOR_RGB2RGBA)
-        img.pixels = m2.toARGBPixels()
-    } else if (this.channels() === 1) {
-        val m2 = Mat()
-        Imgproc.cvtColor(this, m2, Imgproc.COLOR_GRAY2RGBA)
-        img.pixels = m2.toARGBPixels()
-    } else if (this.channels() === 4) {
-        img.pixels = this.toARGBPixels()
+    when {
+        this.channels() == 3 -> {
+            val m2 = Mat()
+            Imgproc.cvtColor(this, m2, Imgproc.COLOR_RGB2RGBA)
+            img.pixels = m2.toARGBPixels()
+        }
+        this.channels() == 1 -> {
+            val m2 = Mat()
+            Imgproc.cvtColor(this, m2, Imgproc.COLOR_GRAY2RGBA)
+            img.pixels = m2.toARGBPixels()
+        }
+        this.channels() == 4 -> img.pixels = this.toARGBPixels()
     }
 
     img.updatePixels()
+}
+
+fun Mat.toPImage() : PImage
+{
+    val resultImage = PImage(this.cols(), this.rows())
+    this.toPImage(resultImage)
+    return resultImage
 }
 
 fun Mat.toARGBPixels(): IntArray {
