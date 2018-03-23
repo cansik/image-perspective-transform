@@ -32,8 +32,6 @@ class Sketch : PApplet() {
         // setup style
         font = createFont("Helvetica", 20f)
         textFont(font, 18f)
-
-        noLoop()
     }
 
     override fun draw() {
@@ -61,8 +59,6 @@ class Sketch : PApplet() {
         // show fps
         fpsAverage += frameRate.toDouble()
         surface.setTitle("IVAT | FPS: ${frameRate.format(2)}\tAVG: ${fpsAverage.average.format(2)}\t")
-
-        saveFrame("readme/current.jpg")
     }
 
     override fun stop() {
