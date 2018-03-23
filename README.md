@@ -1,11 +1,11 @@
-# Image View Angle Transform
-Transform the view angle of an image onto another image of the same object.
+# Image Perspective Transform
+Transform the perspective of an image into a reference image perspective.
 
 ### How the algorithm works?
 * As input the algorithm gets `referenceImage` and `originalImage`
 * First it runs a feature detection over both images
 * The features are matched, and 4 of them selected for the perspective transformation
-    * The 4 features are in the top `n` best matched features and the one's with the largest space between them 
+    * The 4 features are in the top `n` best matched features and the ones with the longest distance to each other 
 * Perspective transformation is performed on the `originalImage`
 * Transformed image is returned
 
