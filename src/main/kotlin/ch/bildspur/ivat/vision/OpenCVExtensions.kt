@@ -234,3 +234,8 @@ fun MatOfPoint.convexHull(clockwise: Boolean = false): MatOfInt {
     Imgproc.convexHull(this, result, clockwise)
     return result
 }
+
+fun Mat.circle(center : Point, radius : Int, color : Scalar, thickness : Int)
+{
+    Imgproc.circle(this, center, radius, color, thickness)
+}
