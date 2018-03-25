@@ -1,6 +1,5 @@
 package ch.bildspur.ivat
 
-import ch.bildspur.ivat.ui.ImageView
 import ch.bildspur.ivat.vision.SimplePerspectiveTransformer
 import ch.bildspur.ivat.vision.copy
 import ch.bildspur.ivat.vision.zeros

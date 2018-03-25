@@ -53,9 +53,6 @@ class SimplePerspectiveTransformer(private val nTopFeatures: Int = 20) : Perspec
 
         // select n top features
         matches.sortBy { it.distance }
-        matches.forEachIndexed { i, o ->
-            println("$i:\t${o.distance.format(4)}")
-        }
         val topMatches = matches.take(nTopFeatures)
 
         // draw relevant keypoints
@@ -90,7 +87,13 @@ class SimplePerspectiveTransformer(private val nTopFeatures: Int = 20) : Perspec
 
 
     private fun findTransformationPoints(matches: List<DMatch>, queryFeatures: List<KeyPoint>): KeyPointRectangle {
-        val rectangle = KeyPointRectangle(queryFeatures[matches.first().queryIdx], matches.first())
+        // find center of points
+        val avgX = matches.sumByDouble { queryFeatures[it.queryIdx].pt.x } / matches.count()
+        val avgY = matches.sumByDouble { queryFeatures[it.queryIdx].pt.y } / matches.count()
+
+        val initialPoint = KeyPoint(avgX.toFloat(), avgY.toFloat(), 1.0f)
+
+        val rectangle = KeyPointRectangle(initialPoint, DMatch(0, 0, 0.0f))
         matches.forEach { rectangle.addPoint(queryFeatures[it.queryIdx], it) }
         return rectangle
     }
