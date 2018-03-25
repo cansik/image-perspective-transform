@@ -7,6 +7,7 @@ import org.opencv.core.*
 import org.opencv.features2d.BFMatcher
 import org.opencv.features2d.Features2d
 import org.opencv.features2d.ORB
+import org.opencv.features2d.ORB.FAST_SCORE
 import org.opencv.features2d.ORB.HARRIS_SCORE
 import org.opencv.imgproc.Imgproc
 
@@ -21,8 +22,8 @@ class SimplePerspectiveTransformer(private val nTopFeatures: Int = 20) : Perspec
 
         // setup detector and matcher
         detector = FeatureDetector(
-                ORB.create(500, 1.2f, 8, 31, 0, 2, HARRIS_SCORE, 31, 20))
-        matcher = BinaryFeatureMatcher(BFMatcher.create(Core.NORM_HAMMING, true)!!)
+                ORB.create(500, 1.2f, 8, 31, 0, 4, HARRIS_SCORE, 31, 20))
+        matcher = BinaryFeatureMatcher(BFMatcher.create(Core.NORM_HAMMING2, true)!!)
     }
 
     override fun detectTransformMatrix(query: Mat, train: Mat): Mat {

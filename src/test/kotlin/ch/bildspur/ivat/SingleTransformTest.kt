@@ -2,6 +2,7 @@ package ch.bildspur.ivat
 
 import ch.bildspur.ivat.vision.SimplePerspectiveTransformer
 import ch.bildspur.ivat.vision.copy
+import ch.bildspur.ivat.vision.format
 import ch.bildspur.ivat.vision.zeros
 import org.junit.Before
 import org.junit.Test
@@ -53,7 +54,11 @@ class SingleTransformTest {
         // create image blend
         Core.addWeighted(train, 0.5, result, 0.5, 0.0, blend)
 
-        // show images¨
+        // calculate difference
+        val similarity = measureSimilarity(train, result)
+        println("Similar: ${(similarity * 100.0).format(2)}%")
+
+        // show images
         HighGui.imshow("train", train)
         HighGui.imshow("query", query)
         HighGui.imshow("result", result)
@@ -65,5 +70,23 @@ class SingleTransformTest {
         Imgcodecs.imwrite("data/result/blend.png", blend)
 
         HighGui.waitKey()
+    }
+
+    private fun measureSimilarity(original : Mat, copy : Mat, maxDelta : Double = 5.0) : Double
+    {
+        var similarityCounter = 0
+        for(y in 0 until original.height())
+        {
+            for(x in 0 until original.width())
+            {
+                val originalColor = original[y, x][0]
+                val copyColor = copy[y, x][0]
+
+                if(Math.abs(originalColor - copyColor) < maxDelta)
+                    similarityCounter++
+            }
+        }
+
+        return similarityCounter.toDouble() / (original.width() * original.height())
     }
 }
