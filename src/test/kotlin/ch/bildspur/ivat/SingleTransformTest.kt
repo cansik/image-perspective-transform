@@ -23,7 +23,7 @@ class SingleTransformTest {
         val train = Imgcodecs.imread("data/reference_bw.jpg")
         val query = Imgcodecs.imread("data/original.jpg")
 
-        transform(train, query, 30)
+        transform(train, query, 20)
     }
 
     @Test fun bridgeTest() {
@@ -44,6 +44,7 @@ class SingleTransformTest {
 
     private fun transform(train : Mat, query : Mat, nTopFeatures : Int = 20)
     {
+        val originalTrain = train.copy()
         val result = query.copy()
         val blend = train.zeros()
 
@@ -52,10 +53,10 @@ class SingleTransformTest {
         transformer.transform(result, matrix)
 
         // create image blend
-        Core.addWeighted(train, 0.5, result, 0.5, 0.0, blend)
+        Core.addWeighted(originalTrain, 0.5, result, 0.5, 0.0, blend)
 
         // calculate difference
-        val similarity = measureSimilarity(train, result)
+        val similarity = measureSimilarity(originalTrain, result, 10.0)
         println("Similar: ${(similarity * 100.0).format(2)}%")
 
         // show images
