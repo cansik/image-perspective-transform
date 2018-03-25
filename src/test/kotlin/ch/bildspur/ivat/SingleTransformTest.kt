@@ -23,7 +23,7 @@ class SingleTransformTest {
         val result = query.copy()
         val blend = train.zeros()
 
-        val transformer = SimplePerspectiveTransformer(100)
+        val transformer = SimplePerspectiveTransformer(30)
         val matrix = transformer.detectTransformMatrix(train, query)
         transformer.transform(result, matrix)
 

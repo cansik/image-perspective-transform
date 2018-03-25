@@ -4,8 +4,7 @@ import org.opencv.core.Mat
 import org.opencv.core.MatOfDMatch
 import org.opencv.features2d.BFMatcher
 
-class BinaryFeatureMatcher {
-    val matcher = BFMatcher.create()!!
+class BinaryFeatureMatcher(val matcher : BFMatcher = BFMatcher.create()!!) {
 
     fun match(queryDescriptors: Mat, trainDescriptors : Mat) : BinaryFeatureMatchResult
     {
