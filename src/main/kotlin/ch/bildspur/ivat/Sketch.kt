@@ -14,7 +14,7 @@ class Sketch : PApplet() {
     private val detector : PerspectiveTransformer = SimplePerspectiveTransformer()
 
     private val fpsAverage = ExponentialMovingAverage(0.1)
-    private val imageSize = 400
+    private val imageSize = 600
 
 
     private lateinit var font : PFont
