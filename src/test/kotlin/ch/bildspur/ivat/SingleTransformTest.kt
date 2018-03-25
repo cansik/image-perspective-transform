@@ -10,6 +10,7 @@ import org.opencv.core.Core
 import org.opencv.core.Mat
 import org.opencv.highgui.HighGui
 import org.opencv.imgcodecs.Imgcodecs
+import kotlin.system.measureTimeMillis
 
 class SingleTransformTest {
 
@@ -42,6 +43,14 @@ class SingleTransformTest {
         transform(train, query)
     }
 
+    @Test fun houseTest() {
+        // load two images
+        val train = Imgcodecs.imread("data/test/house_reference.jpg")
+        val query = Imgcodecs.imread("data/test/house_original.jpg")
+
+        transform(train, query, 20)
+    }
+
     private fun transform(train : Mat, query : Mat, nTopFeatures : Int = 20)
     {
         val originalTrain = train.copy()
@@ -49,8 +58,13 @@ class SingleTransformTest {
         val blend = train.zeros()
 
         val transformer = SimplePerspectiveTransformer(nTopFeatures)
-        val matrix = transformer.detectTransformMatrix(train, query)
-        transformer.transform(result, matrix)
+
+        val processTime = measureTimeMillis {
+            val matrix = transformer.detectTransformMatrix(train, query)
+            transformer.transform(result, matrix)
+        }
+
+        println("Time: $processTime ms")
 
         // create image blend
         Core.addWeighted(originalTrain, 0.5, result, 0.5, 0.0, blend)
