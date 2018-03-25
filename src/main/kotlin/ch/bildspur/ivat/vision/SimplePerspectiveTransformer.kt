@@ -68,9 +68,12 @@ class SimplePerspectiveTransformer(private val nTopFeatures: Int = 20) : Perspec
         val rectangle = findTransformationPoints(topMatches, queryKeyPoints)
 
         // show selected keypoints
-        rectangle.matches.forEach{
+        rectangle.matches.forEachIndexed{ i, it ->
             query.drawCircle(queryKeyPoints[it.queryIdx].pt, 10, Scalar(0.0, 255.0, 0.0), 2)
+            query.drawText("$i", queryKeyPoints[it.queryIdx].pt.transform(10.0, -10.0), Scalar(0.0, 255.0, 0.0), thickness = 1, scale = 0.75)
+
             train.drawCircle(trainKeyPoints[it.trainIdx].pt, 10, Scalar(0.0, 255.0, 0.0), 2)
+            train.drawText("$i", trainKeyPoints[it.trainIdx].pt.transform(10.0, -10.0), Scalar(0.0, 255.0, 0.0), thickness = 1, scale = 0.75)
         }
 
         // create perspective transformation

@@ -1,5 +1,6 @@
 package ch.bildspur.ivat
 
+import ch.bildspur.ivat.ui.ImageView
 import ch.bildspur.ivat.vision.SimplePerspectiveTransformer
 import ch.bildspur.ivat.vision.copy
 import ch.bildspur.ivat.vision.zeros
@@ -30,7 +31,7 @@ class SingleTransformTest {
         // create image blend
         Core.addWeighted(train, 0.5, result, 0.5, 0.0, blend)
 
-        // show images
+        // show images¨
         HighGui.imshow("train", train)
         HighGui.imshow("query", query)
         HighGui.imshow("result", result)

@@ -13,6 +13,7 @@ import java.io.ByteArrayInputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.*
+import org.opencv.core.Core.FONT_HERSHEY_SCRIPT_SIMPLEX
 
 
 /**
@@ -47,8 +48,7 @@ fun PGraphics.cross(x: Float, y: Float, size: Float) {
     this.line(x - size, y, x + size, y)
 }
 
-fun PImage.toMat() : Mat
-{
+fun PImage.toMat(): Mat {
     val image = Mat(this.height, this.width, CvType.CV_8UC4)
     this.toMat(image)
     return image
@@ -86,8 +86,7 @@ fun Mat.toPImage(img: PImage) {
     img.updatePixels()
 }
 
-fun Mat.toPImage() : PImage
-{
+fun Mat.toPImage(): PImage {
     val resultImage = PImage(this.cols(), this.rows())
     this.toPImage(resultImage)
     return resultImage
@@ -205,7 +204,7 @@ fun Mat.gray() {
 }
 
 fun Mat.erode(erosionSize: Int) {
-    if(erosionSize == 0)
+    if (erosionSize == 0)
         return
 
     val element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(2.0 * erosionSize + 1.0, 2.0 * erosionSize + 1.0))
@@ -214,7 +213,7 @@ fun Mat.erode(erosionSize: Int) {
 }
 
 fun Mat.dilate(dilationSize: Int) {
-    if(dilationSize == 0)
+    if (dilationSize == 0)
         return
 
     val element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(2.0 * dilationSize + 1.0, 2.0 * dilationSize + 1.0))
@@ -232,9 +231,8 @@ fun Mat.getRegionMask(regionLabel: Int): Mat {
     return labeledMask
 }
 
-fun PGraphics.imageRect(image : PImage, x : Float, y : Float, width : Float, height : Float)
-{
-    val ratio = if(width - image.width < height - image.height) width / image.width else height / image.height
+fun PGraphics.imageRect(image: PImage, x: Float, y: Float, width: Float, height: Float) {
+    val ratio = if (width - image.width < height - image.height) width / image.width else height / image.height
     this.image(image, x, y, image.width * ratio, image.height * ratio)
 }
 
@@ -244,18 +242,24 @@ fun MatOfPoint.convexHull(clockwise: Boolean = false): MatOfInt {
     return result
 }
 
-fun Mat.drawCircle(center : Point, radius : Int, color : Scalar, thickness : Int = 1)
-{
+fun Mat.drawCircle(center: Point, radius: Int, color: Scalar, thickness: Int = 1) {
     Imgproc.circle(this, center, radius, color, thickness)
 }
 
-fun Mat.drawCross(center : Point, size : Double, color : Scalar, thickness : Int = 1)
-{
+fun Mat.drawCross(center: Point, size: Double, color: Scalar, thickness: Int = 1) {
     val length = size / 2.0
-    Imgproc.line(this,  Point(center.x - length, center.y), Point(center.x + length, center.y), color, thickness)
-    Imgproc.line(this,  Point(center.x, center.y - length), Point(center.x, center.y + length), color, thickness)
+    Imgproc.line(this, Point(center.x - length, center.y), Point(center.x + length, center.y), color, thickness)
+    Imgproc.line(this, Point(center.x, center.y - length), Point(center.x, center.y + length), color, thickness)
 }
 
-fun Mat.imageCenter() : Point{
+fun Mat.drawText(text: String, position: Point, color: Scalar, thickness: Int = 1, fontFace: Int = FONT_HERSHEY_SCRIPT_SIMPLEX, scale: Double = 1.0) {
+    Imgproc.putText(this, text, position, fontFace, scale, color, thickness)
+}
+
+fun Mat.imageCenter(): Point {
     return Point(this.width() / 2.0, this.height() / 2.0)
+}
+
+fun Point.transform(dx: Double, dy: Double): Point {
+    return Point(this.x + dx, this.y + dy)
 }
