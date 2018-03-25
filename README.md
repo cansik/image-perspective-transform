@@ -10,6 +10,10 @@ Transform the perspective of an image into a reference image perspective.
 * Transformed image is returned
 
 ### Current State
+* The algorithm works great if the feature matching is doing it's job. If a feature is miss-matched, the algorithm is not able to find the right transformation matrix. 
+* To speed up the algorithm `FLANN` could be to used for image matching
+* Also `Homography` would be an alternative to this algorithm.
+
 ![Current State](readme/current.jpg)
 
 ### Algorithms
