@@ -6,6 +6,7 @@ import ch.bildspur.ivat.vision.zeros
 import org.junit.Before
 import org.junit.Test
 import org.opencv.core.Core
+import org.opencv.core.Mat
 import org.opencv.highgui.HighGui
 import org.opencv.imgcodecs.Imgcodecs
 
@@ -20,10 +21,32 @@ class SingleTransformTest {
         // load two images
         val train = Imgcodecs.imread("data/reference_bw.jpg")
         val query = Imgcodecs.imread("data/original.jpg")
+
+        transform(train, query, 30)
+    }
+
+    @Test fun bridgeTest() {
+        // load two images
+        val train = Imgcodecs.imread("data/test/bridge_reference.jpg")
+        val query = Imgcodecs.imread("data/test/bridge_original.jpg")
+
+        transform(train, query, 50)
+    }
+
+    @Test fun carTest() {
+        // load two images
+        val train = Imgcodecs.imread("data/test/car_reference.jpg")
+        val query = Imgcodecs.imread("data/test/car_original.jpg")
+
+        transform(train, query)
+    }
+
+    private fun transform(train : Mat, query : Mat, nTopFeatures : Int = 20)
+    {
         val result = query.copy()
         val blend = train.zeros()
 
-        val transformer = SimplePerspectiveTransformer(30)
+        val transformer = SimplePerspectiveTransformer(nTopFeatures)
         val matrix = transformer.detectTransformMatrix(train, query)
         transformer.transform(result, matrix)
 
