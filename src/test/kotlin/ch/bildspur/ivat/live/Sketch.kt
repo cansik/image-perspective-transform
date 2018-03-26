@@ -54,8 +54,11 @@ class LiveSketch : PApplet() {
 
         // do recognition
         if(frameCount > 10) {
-            val transformMatrix = detector.detectTransformMatrix(queryMat, trainMat)
-            detector.transform(resultMat, transformMatrix)
+            try {
+                val transformMatrix = detector.detectTransformMatrix(queryMat, trainMat)
+                detector.transform(resultMat, transformMatrix)
+            } catch (ex : Exception)
+            {}
         }
 
         // draw images

@@ -22,8 +22,8 @@ class SimplePerspectiveTransformer(private val nTopFeatures: Int = 20) : Perspec
 
         // setup detector and matcher
         detector = FeatureDetector(
-                ORB.create(500, 1.2f, 8, 31, 0, 4, HARRIS_SCORE, 31, 20))
-        matcher = BinaryFeatureMatcher(BFMatcher.create(Core.NORM_HAMMING2, true)!!)
+                ORB.create(500, 1.2f, 8, 31, 0, 2, HARRIS_SCORE, 31, 20))
+        matcher = BinaryFeatureMatcher(BFMatcher.create(Core.NORM_HAMMING, true)!!)
     }
 
     override fun detectTransformMatrix(query: Mat, train: Mat): Mat {

@@ -21,16 +21,19 @@ class ZedLeapSource : ImageSource {
     private val leapWidth = 640
     private val leapHeight = 240
 
-    private lateinit var zed : Capture
-    private lateinit var zedCanvas : PGraphics
+    private lateinit var zed: Capture
+    private lateinit var zedCanvas: PGraphics
 
-    private lateinit var leap : LeapMotion
-    private lateinit var leapCanvas : PGraphics
-    private lateinit var leapImage : PImage
+    private lateinit var leap: LeapMotion
+    private lateinit var leapCanvas: PGraphics
+    private lateinit var leapResized: PGraphics
+    private lateinit var leapImage: PImage
 
     override fun setup(parent: PApplet) {
         zedCanvas = parent.createGraphics(zedWidth, zedHeight)
+
         leapCanvas = parent.createGraphics(zedWidth, zedHeight)
+        leapResized = parent.createGraphics(640, 480)
         leapImage = parent.createImage(640, 240, RGB)
 
 
@@ -44,30 +47,33 @@ class ZedLeapSource : ImageSource {
     }
 
     override fun readReference(): PImage {
-        if(leap.controller() == null)
+        if (leap.controller() == null)
             return leapCanvas
 
-        leapCanvas.draw {
-            val controller = leap.controller()!!
-            controller.setPolicy(Controller.PolicyFlag.POLICY_IMAGES)
-            val frame = controller.frame()
+        val controller = leap.controller()!!
+        controller.setPolicy(Controller.PolicyFlag.POLICY_IMAGES)
+        val frame = controller.frame()
 
-            if(frame.isValid && !frame.images().isEmpty)
-            {
-                val img = frame.images().first()
-                img.toPImage(leapImage)
-            }
+        if (frame.isValid && !frame.images().isEmpty) {
+            val img = frame.images().first()
+            img.toPImage(leapImage)
+        }
 
+        leapResized.draw {
             it.background(0f)
-            //it.image(leapImage, 0f, 0f, 640f, 480f)
-            it.imageAspect(leapImage, 0f, 0f, it.width.toFloat(), it.height.toFloat())
+            it.image(leapImage, 0f, 0f, 640f, 480f)
+        }
+
+        leapCanvas.draw {
+            it.background(0f)
+            it.imageAspect(leapResized, 0f, 0f, it.width.toFloat(), it.height.toFloat())
         }
 
         return leapCanvas.get()
     }
 
     override fun readOriginal(): PImage {
-        if(zed.available())
+        if (zed.available())
             zed.read()
 
         zedCanvas.draw {
@@ -77,8 +83,7 @@ class ZedLeapSource : ImageSource {
         return zedCanvas.get()
     }
 
-    fun Image.toPImage(img : PImage)
-    {
+    fun Image.toPImage(img: PImage) {
         val imageData = this.data()
 
         for (i in 0 until this.width() * this.height()) {
