@@ -4,6 +4,7 @@ import ch.bildspur.ivat.io.ImageSource
 import ch.bildspur.ivat.io.SingleImageSource
 import ch.bildspur.ivat.io.ZedLeapSource
 import ch.bildspur.ivat.util.ExponentialMovingAverage
+import ch.bildspur.ivat.util.imageAspect
 import ch.bildspur.ivat.vision.*
 import processing.core.PApplet
 import processing.core.PFont
@@ -41,11 +42,10 @@ class LiveSketch : PApplet() {
         val queryImage = source.readReference()
         val trainImage = source.readOriginal()
 
-        image(queryImage, 0f, 0f, 600f, 600f)
-        image(trainImage, 600f, 0f)
-
-
-        return
+        /*
+        image(queryImage, 0f, 0f)
+        g.imageAspect(trainImage, imageSize.toFloat(), 0f, imageSize.toFloat(), imageSize.toFloat())
+        */
 
         // create images for opencv
         val queryMat = queryImage.toMat()
@@ -53,13 +53,15 @@ class LiveSketch : PApplet() {
         val resultMat = trainImage.toMat()
 
         // do recognition
-        val transformMatrix = detector.detectTransformMatrix(queryMat, trainMat)
-        detector.transform(resultMat, transformMatrix)
+        if(frameCount > 10) {
+            val transformMatrix = detector.detectTransformMatrix(queryMat, trainMat)
+            detector.transform(resultMat, transformMatrix)
+        }
 
         // draw images
-        g.image(queryMat.toPImage(), 0f, 0f)
-        g.image(trainMat.toPImage(), imageSize.toFloat(), 0f)
-        g.image(resultMat.toPImage(), imageSize * 2f, 0f)
+        g.imageAspect(queryMat.toPImage(), 0f, 0f, imageSize.toFloat(), imageSize.toFloat())
+        g.imageAspect(trainMat.toPImage(), imageSize.toFloat(), 0f, imageSize.toFloat(), imageSize.toFloat())
+        g.imageAspect(resultMat.toPImage(), imageSize * 2f, 0f, imageSize.toFloat(), imageSize.toFloat())
 
         // show fps
         fpsAverage += frameRate.toDouble()

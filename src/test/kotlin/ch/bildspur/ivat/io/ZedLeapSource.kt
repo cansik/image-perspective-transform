@@ -1,5 +1,6 @@
 package ch.bildspur.ivat.io
 
+import ch.bildspur.ivat.util.imageAspect
 import ch.bildspur.ivat.vision.draw
 import com.leapmotion.leap.Controller
 import com.leapmotion.leap.Image
@@ -57,11 +58,12 @@ class ZedLeapSource : ImageSource {
                 img.toPImage(leapImage)
             }
 
-            it.background(0f, 255f, 0f)
-            it.image(leapImage, 0f, 0f)
+            it.background(0f)
+            //it.image(leapImage, 0f, 0f, 640f, 480f)
+            it.imageAspect(leapImage, 0f, 0f, it.width.toFloat(), it.height.toFloat())
         }
 
-        return leapCanvas
+        return leapCanvas.get()
     }
 
     override fun readOriginal(): PImage {
@@ -69,12 +71,10 @@ class ZedLeapSource : ImageSource {
             zed.read()
 
         zedCanvas.draw {
-            it.translate(zed.width.toFloat(),0f)
-            it.scale(-1.0f,1.0f)
             it.image(zed, 0f, 0f)
         }
 
-        return zedCanvas
+        return zedCanvas.get()
     }
 
     fun Image.toPImage(img : PImage)
