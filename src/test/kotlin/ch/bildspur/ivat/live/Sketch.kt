@@ -1,4 +1,4 @@
-package ch.bildspur.ivat
+package ch.bildspur.ivat.live
 
 import ch.bildspur.ivat.io.ImageSource
 import ch.bildspur.ivat.io.SingleImageSource
@@ -8,8 +8,7 @@ import processing.core.PApplet
 import processing.core.PFont
 
 
-class Sketch : PApplet() {
-
+class LiveSketch : PApplet() {
     private val source : ImageSource = SingleImageSource("data/reference_bw.jpg", "data/original.jpg")
     private val detector : PerspectiveTransformer = SimplePerspectiveTransformer()
 

@@ -1,10 +1,10 @@
-package ch.bildspur.ivat
+package ch.bildspur.ivat.test
 
-class Main {
+class MainTest {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            val sketch = Sketch()
+            val sketch = TestSketch()
             sketch.run()
         }
     }
