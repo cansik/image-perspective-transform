@@ -2,6 +2,7 @@ package ch.bildspur.ivat.live
 
 import ch.bildspur.ivat.io.ImageSource
 import ch.bildspur.ivat.io.SingleImageSource
+import ch.bildspur.ivat.io.ZedLeapResizedSource
 import ch.bildspur.ivat.io.ZedLeapSource
 import ch.bildspur.ivat.util.ExponentialMovingAverage
 import ch.bildspur.ivat.util.imageAspect
@@ -11,7 +12,7 @@ import processing.core.PFont
 
 
 class LiveSketch : PApplet() {
-    private val source : ImageSource = ZedLeapSource()
+    private val source : ImageSource = ZedLeapResizedSource()
     private val detector : PerspectiveTransformer = SimplePerspectiveTransformer()
 
     private val fpsAverage = ExponentialMovingAverage(0.1)
