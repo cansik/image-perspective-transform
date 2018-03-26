@@ -2,6 +2,7 @@ package ch.bildspur.ivat.live
 
 import ch.bildspur.ivat.io.ImageSource
 import ch.bildspur.ivat.io.SingleImageSource
+import ch.bildspur.ivat.io.ZedLeapSource
 import ch.bildspur.ivat.util.ExponentialMovingAverage
 import ch.bildspur.ivat.vision.*
 import processing.core.PApplet
@@ -9,7 +10,7 @@ import processing.core.PFont
 
 
 class LiveSketch : PApplet() {
-    private val source : ImageSource = SingleImageSource("data/reference_bw.jpg", "data/original.jpg")
+    private val source : ImageSource = ZedLeapSource()
     private val detector : PerspectiveTransformer = SimplePerspectiveTransformer()
 
     private val fpsAverage = ExponentialMovingAverage(0.1)
@@ -33,13 +34,18 @@ class LiveSketch : PApplet() {
     override fun draw() {
         background(22f)
 
+        if(frameCount < 5)
+            return
+
         // read data
         val queryImage = source.readReference()
         val trainImage = source.readOriginal()
 
-        // resize images
-        queryImage.resize(imageSize, 0)
-        trainImage.resize(imageSize, 0)
+        image(queryImage, 0f, 0f, 600f, 600f)
+        image(trainImage, 600f, 0f)
+
+
+        return
 
         // create images for opencv
         val queryMat = queryImage.toMat()
@@ -57,7 +63,7 @@ class LiveSketch : PApplet() {
 
         // show fps
         fpsAverage += frameRate.toDouble()
-        surface.setTitle("IVAT | FPS: ${frameRate.format(2)}\tAVG: ${fpsAverage.average.format(2)}\t")
+        surface.setTitle("IVAT Live | FPS: ${frameRate.format(2)}\tAVG: ${fpsAverage.average.format(2)}\t")
     }
 
     override fun stop() {

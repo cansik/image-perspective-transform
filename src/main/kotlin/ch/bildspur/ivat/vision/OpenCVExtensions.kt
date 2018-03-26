@@ -119,11 +119,13 @@ fun Mat.toBGRA(bgra: Mat) {
     Core.merge(reordered, bgra)
 }
 
+/*
 fun Mat.toImage(): Image {
     val byteMat = MatOfByte()
     Imgcodecs.imencode(".bmp", this, byteMat)
     return Image(ByteArrayInputStream(byteMat.toArray()))
 }
+*/
 
 fun Mat.zeros(): Mat {
     return this.zeros(this.type())

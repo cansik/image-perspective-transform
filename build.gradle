@@ -35,7 +35,7 @@ dependencies {
     compile group: 'org.jogamp.gluegen', name: 'gluegen-rt-main', version: '2.3.2'
 
     // video
-    compile files('lib/video/gst1-java-core-0.9.1.jar')
+    compile files('lib/video/gstreamer-java.jar')
     compile files('lib/video/jna.jar')
     compile files('lib/video/video.jar')
 
@@ -52,6 +52,10 @@ dependencies {
     // serial library
     compile group: 'org.processing', name: 'serial', version: '3.3.6'
     compile group: 'org.scream3r', name: 'jssc', version: '2.8.0'
+
+    // leap motion
+    compile files('lib/leap/LeapJava.jar')
+    compile files('lib/leap/LeapMotion.jar')
 
 }
 
